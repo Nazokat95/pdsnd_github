@@ -16,3 +16,4 @@ Git Commands Documentation.pdf
 ### Credits
 https://git-scm.com/doc
 
+### Other sources were used
