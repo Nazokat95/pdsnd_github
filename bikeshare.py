@@ -5,40 +5,62 @@ import numpy as np
 CITY_DATA = { 'chicago': 'chicago.csv',
               'new york city': 'new_york_city.csv',
               'washington': 'washington.csv' }
+# another way of using lower method to make inputs morerobust
+def check_data_entry(prompt, valid_entries): 
+    """
+    Asks user to type some input and verify if the entry typed is valid.
+    Since we have 3 inputs to ask the user in get_filters(), it is easier to write a function.
+    Args:
+        (str) prompt - message to display to the user
+        (list) valid_entries - list of string that should be accepted 
+    Returns:
+        (str) user_input - the user's valid input
+    """
+    try:
+        user_input = str(input(prompt)).lower()
 
-def get_filters():
+        while user_input not in valid_entries : 
+            print('Sorry... it seems like you\'re not typing a correct entry.')
+            print('Let\'s try again!')
+            user_input = str(input(prompt)).lower()
+
+        print('Great! the chosen entry is: {}\n'.format(user_input))
+        return user_input
+
+    except:
+        print('Seems like there is an issue with your input')
+
+
+
+def get_filters(): 
     """
     Asks user to specify a city, month, and day to analyze.
+
     Returns:
         (str) city - name of the city to analyze
         (str) month - name of the month to filter by, or "all" to apply no month filter
         (str) day - name of the day of week to filter by, or "all" to apply no day filter
     """
-    print('Hello! Let\'s explore some US bikeshare data!')
+
+    print('Hi there! Let\'s explore some US bikeshare data!')
+
     # get user input for city (chicago, new york city, washington). HINT: Use a while loop to handle invalid inputs
-    while True:
-        city = input("Which city would you like to explore ?")
-        city = city.lower()
-        if city in ['chicago', 'new york city', 'washington']: 
-            break
-        else:
-            print("invalid input. Please enter a valid input")
+    valid_cities = CITY_DATA.keys()
+    prompt_cities = 'Please choose one of the 3 cities (chicago, new york city, washington): '
+    city = check_data_entry(prompt_cities, valid_cities)
+
+
     # get user input for month (all, january, february, ... , june)
-    while True:    
-        month = input("Do you want details specific to a particular month? If yes, type month name from within first six months else type 'all'")
-        month = month.lower()
-        if month in ['january', 'february', 'march', 'april', 'may', 'june', 'all']:
-            break
-        else:
-            print("invalid input. Please enter a valid input")
+    valid_months = ['all','january','february','march','april','may','june']
+    prompt_month = 'Please choose a month (all, january, february, ... , june): '
+    month = check_data_entry(prompt_month, valid_months)
+
     # get user input for day of week (all, monday, tuesday, ... sunday)
-    while True:
-        day = input("Do you want details specific to a particular day? If yes, type day name else type 'all'")
-        day = day.lower()
-        if day in ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'all']:
-            break
-        else:
-            print("invalid input. Please enter a valid input")
+    valid_days = ['all','monday','tuesday','wednesday','thursday','friday','saturday', 'sunday']
+    prompt_day = 'Please choose a day (all, monday, tuesday, ... sunday): '
+    day = check_data_entry(prompt_day, valid_days)
+
+
     print('-'*40)
     return city, month, day
 
@@ -169,6 +191,25 @@ def user_stats(df, city):
             x = x+5
         else:
             break
+def search_stations(bikeshare_data, search_query):
+    """
+    Searches for stations by name or location.
+    Args:
+        bikeshare_data (DataFrame): The bikeshare data DataFrame.
+        search_query (str): The search query to filter stations.
+    Returns:
+        None
+    """
+    # Filter the DataFrame based on the search query
+    matching_stations = bikeshare_data[bikeshare_data['Start Station'].str.contains(search_query, case=False) |
+                                       bikeshare_data['End Station'].str.contains(search_query, case=False)]
+
+    # Display the filtered results
+    if not matching_stations.empty:
+        print("Stations matching your search query:")
+        print(matching_stations[['Start Station', 'End Station']].drop_duplicates().reset_index(drop=True))
+    else:
+        print("No stations found matching your search query.")        
 def raw_data (df):
     """Displays the data due filteration.
     5 rows will added in each press"""
