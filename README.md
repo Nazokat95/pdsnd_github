@@ -7,7 +7,7 @@ May 9, 2023
 Post your Work on Github
 
 ### Description
-In this project, you'll be simulating a realistic workflow to refactor your previous BikeShare project using Git.
+In this project, I'll be simulating a realistic workflow to refactor my previous BikeShare project using Git.
 
 ### Files used
 The following file contains necessary commands used to do tasks:
