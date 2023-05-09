@@ -159,7 +159,25 @@ def trip_duration_stats(df):
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
+def search_stations(bikeshare_data, search_query):
+    """
+    Searches for stations by name or location.
+    Args:
+        bikeshare_data (DataFrame): The bikeshare data DataFrame.
+        search_query (str): The search query to filter stations.
+    Returns:
+        None
+    """
+    # Filter the DataFrame based on the search query
+    matching_stations = bikeshare_data[bikeshare_data['Start Station'].str.contains(search_query, case=False) |
+                                       bikeshare_data['End Station'].str.contains(search_query, case=False)]
 
+    # Display the filtered results
+    if not matching_stations.empty:
+        print("Stations matching your search query:")
+        print(matching_stations[['Start Station', 'End Station']].drop_duplicates().reset_index(drop=True))
+    else:
+        print("No stations found matching your search query.")
 def user_stats(df, city):
     """Displays statistics on bikeshare users."""
 
@@ -191,25 +209,7 @@ def user_stats(df, city):
             x = x+5
         else:
             break
-def search_stations(bikeshare_data, search_query):
-    """
-    Searches for stations by name or location.
-    Args:
-        bikeshare_data (DataFrame): The bikeshare data DataFrame.
-        search_query (str): The search query to filter stations.
-    Returns:
-        None
-    """
-    # Filter the DataFrame based on the search query
-    matching_stations = bikeshare_data[bikeshare_data['Start Station'].str.contains(search_query, case=False) |
-                                       bikeshare_data['End Station'].str.contains(search_query, case=False)]
-
-    # Display the filtered results
-    if not matching_stations.empty:
-        print("Stations matching your search query:")
-        print(matching_stations[['Start Station', 'End Station']].drop_duplicates().reset_index(drop=True))
-    else:
-        print("No stations found matching your search query.")        
+       
 def raw_data (df):
     """Displays the data due filteration.
     5 rows will added in each press"""
